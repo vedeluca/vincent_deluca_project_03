@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.vincent_deluca_project_03.DrawerActivity;
+import com.example.vincent_deluca_project_03.MainActivity;
 import com.example.vincent_deluca_project_03.R;
 import com.example.vincent_deluca_project_03.databinding.ActivityLoginBinding;
 
@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (loginResult.getSuccess() != null) {
                 updateUiWithUser(loginResult.getSuccess());
-                startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 setResult(Activity.RESULT_OK);
                 finish();
             }
