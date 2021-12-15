@@ -3,26 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/DetailsFragment">
+    app:startDestination="@id/RecyclerFragment">
 
     <fragment
         android:id="@+id/DetailsFragment"
-        android:name="com.example.vincent_deluca_project_03.RecyclerFragment"
+        android:name="com.example.vincent_deluca_project_03.DetailsFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_recycler">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/RecyclerFragment" />
+        tools:layout="@layout/fragment_details">
+        <argument android:name="poster"
+            app:argType="string"/>
+        <argument android:name="title"
+            app:argType="string"/>
+        <argument android:name="year"
+            app:argType="string"/>
+        <argument android:name="rating"
+            app:argType="float"/>
+        <argument android:name="description"
+            app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/RecyclerFragment"
-        android:name="com.example.vincent_deluca_project_03.DetailsFragment"
+        android:name="com.example.vincent_deluca_project_03.RecyclerFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_details">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/DetailsFragment" />
+        tools:layout="@layout/fragment_recycler">
     </fragment>
 </navigation>

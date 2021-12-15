@@ -6,16 +6,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavArgument;
+import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.NavInflater;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vincent_deluca_project_03.databinding.FragmentRecyclerBinding;
 
-public class RecyclerFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
 
+public class RecyclerFragment extends Fragment implements ItemClickListener {
+
+    @Override
+    public void onItemClick(MovieModel movieModel) {
+        NavArgument posterArg = new NavArgument.Builder().setDefaultValue(movieModel.url).build();
+        NavArgument titleArg = new NavArgument.Builder().setDefaultValue(movieModel.title).build();
+        NavArgument yearArg = new NavArgument.Builder().setDefaultValue(movieModel.year).build();
+        NavArgument ratingArg = new NavArgument.Builder().setDefaultValue(movieModel.rating).build();
+        NavArgument desciptionArg = new NavArgument.Builder().setDefaultValue(movieModel.description).build();
+        NavController navController = NavHostFragment.findNavController(RecyclerFragment.this);
+        NavInflater navInflater = navController.getNavInflater();
+        NavGraph navGraph = navInflater.inflate(R.navigation.nav_graph);
+        navGraph.addArgument("poster", posterArg);
+        navGraph.addArgument("title", titleArg);
+        navGraph.addArgument("year", yearArg);
+        navGraph.addArgument("rating", ratingArg);
+        navGraph.addArgument("description", desciptionArg);
+        navController.setGraph(navGraph);
+    }
 
     public interface OnItemSelectedListener {
         public void onListItemSelected(View sharedView, int imageResourceID, String title, String year);
@@ -23,7 +47,8 @@ public class RecyclerFragment extends Fragment {
 
     OnItemSelectedListener clickListener;
     private FragmentRecyclerBinding binding;
-    private final RecyclerAdapter recyclerAdapter = new RecyclerAdapter();
+    private RecyclerAdapter recyclerAdapter;
+    private List<MovieModel> movieList = null;
 
     @Override
     public View onCreateView(
@@ -39,32 +64,9 @@ public class RecyclerFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerAdapter = new RecyclerAdapter( this, recyclerView);
         recyclerView.setAdapter(recyclerAdapter);
         return view;
-
-    }
-
-//    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-
-//        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(RecyclerFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-//            }
-//        });
-//    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            clickListener = (OnItemSelectedListener) context;
-            recyclerAdapter.setOnItemClickListener(clickListener);
-        } catch (ClassCastException ex) {
-            throw new ClassCastException(context.toString() + " must implement EventTrack");
-        }
     }
 
     @Override
