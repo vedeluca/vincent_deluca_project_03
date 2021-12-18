@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
+        final Button bypassButton = binding.bypass;
 
         loginViewModel.getLoginFormState().observe(this, loginFormState -> {
             if (loginFormState == null) {
@@ -102,6 +103,11 @@ public class LoginActivity extends AppCompatActivity {
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(),
                     passwordEditText.getText().toString());
+        });
+        bypassButton.setOnClickListener(v ->{
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            setResult(Activity.RESULT_OK);
+            finish();
         });
     }
 
