@@ -25,20 +25,14 @@ public class RecyclerFragment extends Fragment implements ItemClickListener {
 
     @Override
     public void onItemClick(MovieModel movieModel) {
-        NavArgument posterArg = new NavArgument.Builder().setDefaultValue(movieModel.url).build();
-        NavArgument titleArg = new NavArgument.Builder().setDefaultValue(movieModel.title).build();
-        NavArgument yearArg = new NavArgument.Builder().setDefaultValue(movieModel.year).build();
-        NavArgument ratingArg = new NavArgument.Builder().setDefaultValue(movieModel.rating).build();
-        NavArgument desciptionArg = new NavArgument.Builder().setDefaultValue(movieModel.description).build();
         NavController navController = NavHostFragment.findNavController(RecyclerFragment.this);
-        NavInflater navInflater = navController.getNavInflater();
-        NavGraph navGraph = navInflater.inflate(R.navigation.nav_graph);
-        navGraph.addArgument("poster", posterArg);
-        navGraph.addArgument("title", titleArg);
-        navGraph.addArgument("year", yearArg);
-        navGraph.addArgument("rating", ratingArg);
-        navGraph.addArgument("description", desciptionArg);
-        navController.setGraph(navGraph);
+        Bundle arguments = new Bundle();
+        arguments.putString("poster", movieModel.url);
+        arguments.putString("title", movieModel.title);
+        arguments.putString("year", movieModel.year);
+        arguments.putFloat("rating", movieModel.rating);
+        arguments.putString("description", movieModel.description);
+        navController.navigate(R.id.DetailsFragment, arguments);
     }
 
     public interface OnItemSelectedListener {
@@ -64,7 +58,7 @@ public class RecyclerFragment extends Fragment implements ItemClickListener {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerAdapter = new RecyclerAdapter( this, recyclerView);
+        recyclerAdapter = new RecyclerAdapter(this, recyclerView);
         recyclerView.setAdapter(recyclerAdapter);
         return view;
     }

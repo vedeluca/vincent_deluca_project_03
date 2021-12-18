@@ -1,7 +1,5 @@
 package com.example.vincent_deluca_project_03;
 
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -21,9 +18,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -152,10 +146,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         public ViewHolder(@NonNull View view) {
             super(view);
-            card_title = (TextView) view.findViewById(R.id.card_title);
-            card_year = (TextView) view.findViewById(R.id.card_year);
-            card_rating = (RatingBar) view.findViewById(R.id.card_rating);
-            card_poster = (ImageView) view.findViewById(R.id.card_poster);
+            card_title = view.findViewById(R.id.card_title);
+            card_year = view.findViewById(R.id.card_year);
+            card_rating = view.findViewById(R.id.card_rating);
+            card_poster = view.findViewById(R.id.card_poster);
         }
     }
 }
