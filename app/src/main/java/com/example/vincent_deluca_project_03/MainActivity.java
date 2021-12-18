@@ -40,12 +40,6 @@ public class MainActivity extends AppCompatActivity{
         navController.setGraph(navGraph);
         appBarConfiguration = new AppBarConfiguration.Builder(navGraph).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show()
-        );
     }
 
     @Override

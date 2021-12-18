@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vincent_deluca_project_03.databinding.FragmentRecyclerBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,12 @@ public class RecyclerFragment extends Fragment implements ItemClickListener {
         recyclerView.setLayoutManager(layoutManager);
         recyclerAdapter = new RecyclerAdapter(this, recyclerView);
         recyclerView.setAdapter(recyclerAdapter);
+
+        binding.fab.setOnClickListener(v ->
+                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null)
+                        .show()
+        );
         return view;
     }
 
