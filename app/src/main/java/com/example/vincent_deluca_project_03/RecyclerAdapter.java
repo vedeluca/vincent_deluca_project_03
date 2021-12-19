@@ -51,6 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 ));
                 notifyItemInserted(movieList.size() - 1);
                 recyclerView.scrollToPosition(movieList.size() - 1);
+                movieListFiltered = movieList;
             }
 
             @Override
@@ -83,19 +84,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
+                System.out.println("char = " + charString);
                 if (charString.isEmpty()) {
                     movieListFiltered = movieList;
                 } else {
                     List<MovieModel> filteredList = new ArrayList<>();
                     for (MovieModel movie : movieList) {
                         String title = movie.title.toLowerCase();
-                        if (title.contains(charString.toLowerCase()))
+                        if (title.contains(charString.toLowerCase())){
+                            System.out.println("title = " + title);
                             filteredList.add(movie);
+                        }
+
                     }
                     movieListFiltered = filteredList;
                 }
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = movieListFiltered;
+                System.out.println("filter results = " + filterResults.values);
                 return filterResults;
             }
 
@@ -116,7 +122,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final MovieModel movieModel = movieList.get(position);
+        final MovieModel movieModel = movieListFiltered.get(position);
         holder.card_title.setText(movieModel.title);
         holder.card_rating.setRating(movieModel.rating);
         holder.card_year.setText(movieModel.year);
@@ -135,7 +141,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return movieList.size();
+        return movieListFiltered.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
