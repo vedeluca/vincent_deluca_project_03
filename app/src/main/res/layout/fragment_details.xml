@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="@id/movie_description"
         app:layout_constraintHorizontal_weight="2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/movie_title"
@@ -23,7 +24,8 @@
         app:layout_constraintHorizontal_weight="3"
         app:layout_constraintLeft_toRightOf="@id/movie_poster"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/movie_title" />
+        app:layout_constraintTop_toTopOf="@id/movie_title"
+        tools:text="Spider-Man 3" />
 
     <TextView
         android:id="@+id/movie_year"
@@ -32,7 +34,38 @@
         app:layout_constraintHorizontal_weight="3"
         app:layout_constraintLeft_toRightOf="@id/movie_poster"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/movie_title" />
+        app:layout_constraintTop_toBottomOf="@id/movie_title"
+        tools:text="2007" />
+
+    <TextView
+        android:id="@+id/movie_length"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintLeft_toRightOf="@id/movie_poster"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_year"
+        tools:text="Length 139 min" />
+
+    <TextView
+        android:id="@+id/movie_stars"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintLeft_toRightOf="@id/movie_poster"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_length"
+        tools:text="Starring: Tobey Maguire, Kirsten Dunst, Topher Grace" />
+
+    <TextView
+        android:id="@+id/movie_director"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintLeft_toRightOf="@id/movie_poster"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_stars"
+        tools:text="Directed By: Sam Raimi" />
 
     <LinearLayout
         android:id="@+id/rating_wrapper"
@@ -41,7 +74,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintLeft_toRightOf="@id/movie_poster"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/movie_year">
+        app:layout_constraintTop_toBottomOf="@id/movie_director">
 
         <RatingBar
             android:id="@+id/movie_rating"
@@ -59,14 +92,14 @@
         android:background="?attr/colorPrimary"
         app:layout_constraintLeft_toRightOf="@id/movie_poster"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rating_wrapper"/>
+        app:layout_constraintTop_toBottomOf="@id/rating_wrapper" />
 
     <TextView
         android:id="@+id/movie_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/movie_poster"
         app:layout_constraintLeft_toRightOf="@id/movie_poster"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_line" />
+        app:layout_constraintTop_toBottomOf="@id/rating_wrapper"
+        tools:text='"A strange black entity from another world bonds with Peter Parker and causes inner turmoil as he contends with new villains, temptations, and revenge."' />
 </androidx.constraintlayout.widget.ConstraintLayout>

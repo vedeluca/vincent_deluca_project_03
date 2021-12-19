@@ -26,9 +26,22 @@
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Movies</string>
     <string name="second_fragment_label">Movie Detail</string>
+    <string name="third_fragment_label">Add Movie</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="search">Search</string>
+    <string name="description">Description</string>
+    <string name="director">Director</string>
+    <string name="rating">Rating</string>
+    <string name="stars">Stars</string>
+    <string name="length">Length</string>
+    <string name="year">Year</string>
+    <string name="title">Title</string>
+    <string name="submit">Submit</string>
+    <string name="delete">Delete</string>
+    <string name="duplicate">Duplicate</string>
+
 </resources>

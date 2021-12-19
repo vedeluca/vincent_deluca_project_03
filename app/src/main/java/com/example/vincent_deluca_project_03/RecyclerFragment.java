@@ -3,8 +3,15 @@ package com.example.vincent_deluca_project_03;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.widget.SearchView;
+
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavArgument;
@@ -28,11 +35,7 @@ public class RecyclerFragment extends Fragment implements ItemClickListener {
     public void onItemClick(MovieModel movieModel) {
         NavController navController = NavHostFragment.findNavController(RecyclerFragment.this);
         Bundle arguments = new Bundle();
-        arguments.putString("poster", movieModel.url);
-        arguments.putString("title", movieModel.title);
-        arguments.putString("year", movieModel.year);
-        arguments.putFloat("rating", movieModel.rating);
-        arguments.putString("description", movieModel.description);
+        arguments.putSerializable("movie", movieModel);
         navController.navigate(R.id.DetailsFragment, arguments);
     }
 
@@ -63,10 +66,9 @@ public class RecyclerFragment extends Fragment implements ItemClickListener {
         recyclerView.setAdapter(recyclerAdapter);
 
         binding.fab.setOnClickListener(v ->
-                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show()
-        );
+                NavHostFragment.findNavController(RecyclerFragment.this).navigate(R.id.AddFragment));
+
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -74,6 +76,27 @@ public class RecyclerFragment extends Fragment implements ItemClickListener {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.appbar_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search_action);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                recyclerAdapter.getFilter().filter(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                recyclerAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
 }
