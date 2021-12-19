@@ -1,13 +1,17 @@
 package com.example.vincent_deluca_project_03;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,7 +47,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         snapshot.child("description").getValue().toString(),
                         snapshot.child("director").getValue().toString(),
                         snapshot.child("length").getValue().toString(),
-                        ((Double) snapshot.child("rating").getValue()).floatValue(),
+                        ((Number) snapshot.child("rating").getValue()).floatValue(),
                         snapshot.child("stars").getValue().toString(),
                         snapshot.child("title").getValue().toString(),
                         snapshot.child("url").getValue().toString(),
@@ -91,7 +95,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     List<MovieModel> filteredList = new ArrayList<>();
                     for (MovieModel movie : movieList) {
                         String title = movie.title.toLowerCase();
-                        if (title.contains(charString.toLowerCase())){
+                        if (title.contains(charString.toLowerCase())) {
                             System.out.println("title = " + title);
                             filteredList.add(movie);
                         }
@@ -132,6 +136,30 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             if (itemClickListener != null)
                 itemClickListener.onItemClick(movieModel);
         });
+        holder.extras.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(v.getContext(), v);
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.extras_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.delete:
+                        Toast.makeText(v.getContext(), "delete", Toast.LENGTH_SHORT).show();
+                        //TODO: add key system to movie model?
+//                        moviesRef.child(movieModel.postKey).setValue(null).addOnSuccessListener(unused -> Toast
+//                                .makeText(v.getContext(), "delete", Toast.LENGTH_SHORT).show());
+                        return true;
+                    case R.id.duplicate:
+                        Toast.makeText(v.getContext(), "duplicate", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(v.getContext(), PhotoPreview.class);
+//                        intent.putExtra("key", u.postKey);
+//                        v.getContext().startActivity(intent);
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+            popup.show();
+        });
     }
 
     public void removeListener() {
@@ -149,6 +177,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public TextView card_year;
         public RatingBar card_rating;
         public ImageView card_poster;
+        public ImageView extras;
 
         public ViewHolder(@NonNull View view) {
             super(view);
@@ -156,6 +185,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             card_year = view.findViewById(R.id.card_year);
             card_rating = view.findViewById(R.id.card_rating);
             card_poster = view.findViewById(R.id.card_poster);
+            extras = view.findViewById(R.id.extras);
         }
     }
 }

@@ -13,21 +13,10 @@
         android:id="@+id/DetailsFragment"
         android:name="com.example.vincent_deluca_project_03.DetailsFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_details">
-        <argument
-            android:name="poster"
-            app:argType="string" />
-        <argument
-            android:name="title"
-            app:argType="string" />
-        <argument
-            android:name="year"
-            app:argType="string" />
-        <argument
-            android:name="rating"
-            app:argType="float" />
-        <argument
-            android:name="description"
-            app:argType="string" />
-    </fragment>
+        tools:layout="@layout/fragment_details" />
+    <fragment
+        android:id="@+id/AddFragment"
+        android:name="com.example.vincent_deluca_project_03.AddFragment"
+        android:label="@string/third_fragment_label"
+        tools:layout="@layout/fragment_add" />
 </navigation>

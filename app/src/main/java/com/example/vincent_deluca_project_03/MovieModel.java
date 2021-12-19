@@ -1,6 +1,8 @@
 package com.example.vincent_deluca_project_03;
 
-public class MovieModel {
+import java.io.Serializable;
+
+public class MovieModel implements Serializable {
     public String description;
     public String director;
     public String length;

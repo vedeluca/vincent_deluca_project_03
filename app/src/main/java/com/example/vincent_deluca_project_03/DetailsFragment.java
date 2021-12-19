@@ -30,17 +30,16 @@ public class DetailsFragment extends Fragment {
         binding = FragmentDetailsBinding.inflate(inflater, container, false);
         Bundle args = getArguments();
         if(args != null){
-            String poster = getArguments().getString("poster");
-            String title = getArguments().getString("title");
-            String year = getArguments().getString("year");
-            float rating = getArguments().getFloat("rating");
-            String description = getArguments().getString("description");
-            StorageReference pathReference = FirebaseStorage.getInstance().getReference(poster);
+            MovieModel movieModel = (MovieModel) args.getSerializable("movie");
+            StorageReference pathReference = FirebaseStorage.getInstance().getReference(movieModel.url);
             pathReference.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(binding.moviePoster));
-            binding.movieTitle.setText(title);
-            binding.movieYear.setText(year);
-            binding.movieRating.setRating(rating);
-            binding.movieDescription.setText(description);
+            binding.movieTitle.setText(movieModel.title);
+            binding.movieYear.setText(movieModel.year);
+            binding.movieLength.setText(String.format("Length: %s", movieModel.length));
+            binding.movieStars.setText(String.format("Starring: %s", movieModel.stars));
+            binding.movieDirector.setText(String.format("Directed By: %s", movieModel.director));
+            binding.movieRating.setRating(movieModel.rating);
+            binding.movieDescription.setText(movieModel.description);
         }
         return binding.getRoot();
     }

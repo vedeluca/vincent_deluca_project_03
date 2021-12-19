@@ -8,7 +8,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.appcompat.widget.SearchView;
+
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -33,11 +35,7 @@ public class RecyclerFragment extends Fragment implements ItemClickListener {
     public void onItemClick(MovieModel movieModel) {
         NavController navController = NavHostFragment.findNavController(RecyclerFragment.this);
         Bundle arguments = new Bundle();
-        arguments.putString("poster", movieModel.url);
-        arguments.putString("title", movieModel.title);
-        arguments.putString("year", movieModel.year);
-        arguments.putFloat("rating", movieModel.rating);
-        arguments.putString("description", movieModel.description);
+        arguments.putSerializable("movie", movieModel);
         navController.navigate(R.id.DetailsFragment, arguments);
     }
 
@@ -68,10 +66,7 @@ public class RecyclerFragment extends Fragment implements ItemClickListener {
         recyclerView.setAdapter(recyclerAdapter);
 
         binding.fab.setOnClickListener(v ->
-                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show()
-        );
+                NavHostFragment.findNavController(RecyclerFragment.this).navigate(R.id.AddFragment));
 
         setHasOptionsMenu(true);
         return view;
