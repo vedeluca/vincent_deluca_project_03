@@ -33,9 +33,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference moviesRef = database.getReference("Movies");
     ChildEventListener moviesRefListener;
-    private List<MovieModel> movieList;
-    private List<MovieModel> movieListFiltered;
+    private List<MovieKey> movieList;
+    private List<MovieKey> movieListFiltered;
     private final ItemClickListener itemClickListener;
+
+    private class MovieKey {
+        private String key;
+        private MovieModel movieModel;
+
+        protected MovieKey(String key, MovieModel movieModel) {
+            this.key = key;
+            this.movieModel = movieModel;
+        }
+    }
 
     public RecyclerAdapter(ItemClickListener itemClickListener, RecyclerView recyclerView) {
         this.itemClickListener = itemClickListener;
@@ -43,7 +53,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         moviesRefListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                movieList.add(new MovieModel(
+                MovieKey movieKey = new MovieKey(snapshot.getKey(), new MovieModel(
                         snapshot.child("description").getValue().toString(),
                         snapshot.child("director").getValue().toString(),
                         snapshot.child("length").getValue().toString(),
@@ -53,6 +63,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         snapshot.child("url").getValue().toString(),
                         snapshot.child("year").getValue().toString()
                 ));
+                movieList.add(movieKey);
                 notifyItemInserted(movieList.size() - 1);
                 recyclerView.scrollToPosition(movieList.size() - 1);
                 movieListFiltered = movieList;
@@ -65,7 +76,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
+                for (int i = 0; i < movieList.size(); i++) {
+                    if (movieList.get(i).key.equals(snapshot.getKey())) {
+                        movieList.remove(i);
+                        notifyItemRemoved(i);
+                        movieListFiltered = movieList;
+                        return;
+                    }
+                }
             }
 
             @Override
@@ -88,30 +106,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                System.out.println("char = " + charString);
                 if (charString.isEmpty()) {
                     movieListFiltered = movieList;
                 } else {
-                    List<MovieModel> filteredList = new ArrayList<>();
-                    for (MovieModel movie : movieList) {
-                        String title = movie.title.toLowerCase();
-                        if (title.contains(charString.toLowerCase())) {
-                            System.out.println("title = " + title);
+                    List<MovieKey> filteredList = new ArrayList<>();
+                    for (MovieKey movie : movieList) {
+                        String title = movie.movieModel.title.toLowerCase();
+                        if (title.contains(charString.toLowerCase()))
                             filteredList.add(movie);
-                        }
-
                     }
                     movieListFiltered = filteredList;
                 }
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = movieListFiltered;
-                System.out.println("filter results = " + filterResults.values);
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults filterResults) {
-                movieListFiltered = (List<MovieModel>) filterResults.values;
+                movieListFiltered = (List<MovieKey>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
@@ -126,12 +139,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final MovieModel movieModel = movieListFiltered.get(position);
+        MovieKey movieKey = movieListFiltered.get(position);
+        MovieModel movieModel = movieKey.movieModel;
         holder.card_title.setText(movieModel.title);
         holder.card_rating.setRating(movieModel.rating);
         holder.card_year.setText(movieModel.year);
         StorageReference pathReference = FirebaseStorage.getInstance().getReference(movieModel.url);
-        pathReference.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(holder.card_poster));
+        pathReference.getDownloadUrl().addOnSuccessListener(uri ->
+                Picasso.get().load(uri).into(holder.card_poster));
         holder.card_poster.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onItemClick(movieModel);
@@ -141,21 +156,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             MenuInflater inflater = popup.getMenuInflater();
             inflater.inflate(R.menu.extras_menu, popup.getMenu());
             popup.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()) {
-                    case R.id.delete:
-                        Toast.makeText(v.getContext(), "delete", Toast.LENGTH_SHORT).show();
-                        //TODO: add key system to movie model?
-//                        moviesRef.child(movieModel.postKey).setValue(null).addOnSuccessListener(unused -> Toast
-//                                .makeText(v.getContext(), "delete", Toast.LENGTH_SHORT).show());
-                        return true;
-                    case R.id.duplicate:
-                        Toast.makeText(v.getContext(), "duplicate", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(v.getContext(), PhotoPreview.class);
-//                        intent.putExtra("key", u.postKey);
-//                        v.getContext().startActivity(intent);
-                        return true;
-                    default:
-                        return false;
+                if (item.getItemId() == R.id.delete) {
+                    moviesRef.child(movieKey.key).setValue(null).addOnSuccessListener(unused ->
+                            Toast.makeText(v.getContext(), "Delete", Toast.LENGTH_SHORT).show());
+                    return true;
+                } else if (item.getItemId() == R.id.duplicate) {
+                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference moviesRef = database.getReference("Movies");
+                    final DatabaseReference newMovieRef = moviesRef.push();
+                    newMovieRef.setValue(movieModel).addOnSuccessListener(unused ->
+                            Toast.makeText(v.getContext(), "Duplicate", Toast.LENGTH_SHORT).show());
+                    return true;
+                } else {
+                    return false;
                 }
             });
             popup.show();

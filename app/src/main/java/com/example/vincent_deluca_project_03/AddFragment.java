@@ -111,7 +111,15 @@ public class AddFragment extends Fragment {
         String stars = binding.addStars.getText().toString();
         String title = binding.addTitle.getText().toString();
         String year = binding.addYear.getText().toString();
-        newMovieRef.setValue(new MovieModel(description, director, length, rating, stars, title, url, year))
+        newMovieRef.setValue(new MovieModel(
+                description,
+                director,
+                length,
+                rating,
+                stars,
+                title,
+                url,
+                year))
                 .addOnSuccessListener(v ->
                         Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show());
     }
